@@ -18,8 +18,6 @@ class VariableBuilder
      url_response_times: url_response_times}
   end
 
-  private
-
   def identifier
     source.identifier.capitalize
   end

@@ -38,6 +38,15 @@ module TrafficSpy
       erb :error
     end
 
+    get '/sources/:identifier/urls/:relative_path' do
+      source_id = Source.find_by(identifier: params[:identifier])
+      urls = Url.where(source_id: source_id)
+      url = urls.select{|url| url.address.include?(params[:relative_path])}
+      visits = Visit.where(url_id: url.first.id)
+      refs = top_referrers(visits)
+      erb :url_stats, :locals => {:url => url, :visits => visits, :refs => refs}
+    end
+
     private
 
     def build_attributes(params)
@@ -46,6 +55,12 @@ module TrafficSpy
       attributes[:sha_identifier] = sha_identifier
       attributes[:source_id] = Source.find_by(identifier: params[:identifier]).id
       attributes
+    end
+
+    def top_referrers(visits)
+      visits.group(:referred_by).count.max_by(5) do |key, value|
+        value
+      end
     end
   end
 end

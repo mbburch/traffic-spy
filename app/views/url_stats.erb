@@ -1,0 +1,33 @@
+<div class="page-header">
+  <h1><%= url.first.address %> Site Data</h1>
+</div>
+
+<div class="row">
+  <div class="col-md-6" id="urls">
+    <h3>URL Response Times</h3>
+    <ul>
+      <li>Maximum Response Time: <%= visits.maximum("responded_in").to_i %>ms</li>
+      <li>Minimum Response Time: <%= visits.minimum("responded_in").to_i %>ms</li>
+      <li>Average Response Time: <%= visits.average("responded_in").to_i %>ms</li>
+    </ul>
+  </div>
+
+  <div class="col-md-6" id="urls">
+    <h3>HTTP Verbs Used</h3>
+    <ul>
+      <li>HTTP GET: <%= visits.where(request_type: "GET").count %></li>
+      <li>HTTP PUT: <%= visits.where(request_type: "PUT").count %></li>
+      <li>HTTP POST: <%= visits.where(request_type: "POST").count %></li>
+      <li>HTTP DELETE: <%= visits.where(request_type: "DELETE").count %></li>
+    </ul>
+  </div>
+
+  <div class="col-md-6" id="urls">
+    <h3>Most Popular Referrers</h3>
+    <ol>
+      <% refs.each do |ref,count| %>
+      <li><%= "#{ref}: #{count}" %></li>
+      <% end %>
+    </ol>
+  </div>
+</div>

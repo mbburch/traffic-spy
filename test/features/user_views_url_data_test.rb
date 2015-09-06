@@ -1,56 +1,36 @@
 require_relative "../test_helper"
 
-class UserViewsSiteDataTest < FeatureTest
+class UserViewsUrlStatistics < FeatureTest
 
-  def test_user_sees_aggregate_data
-    visit "/sources/jumpstartlab"
-
-    assert_equal "/sources/jumpstartlab", current_path
-
-    within(".page-header") do
-      assert page.has_content?("Jumpstartlab Site Data")
-    end
-
-    within("#urls") do
-      assert page.has_content?("Requested URLs")
-      assert page.has_content?("http://jumpstartlab.com/blog: 2 visits")
-      assert page.has_content?("http://jumpstartlab.com/about: 1 visits")
-    end
-
-    within("#browsers") do
-      assert page.has_content?("Web Browser Breakdown")
-      assert page.has_content?("Chrome: 3")
-    end
-
-    within("#os") do
-      assert page.has_content?("OS Breakdown")
-      assert page.has_content?("Macintosh: 3")
-    end
-
-    within("#screen_resolutions") do
-      assert page.has_content?("Screen Resolutions")
-      assert page.has_content?("1920x1280")
-    end
+  def test_user_sees_statistics_for_url
+    visit "/sources/jumpstartlab/urls/blog"
 
     within("#response_times") do
-      assert page.has_content?("URL Average Response Times")
-      assert page.has_content?("http://jumpstartlab.com/blog: 46ms")
-      assert page.has_content?("http://jumpstartlab.com/about: 37ms")
-      assert find_link("http://jumpstartlab.com/blog").visible?
-      assert find_link("http://jumpstartlab.com/about").visible?
+      assert page.has_content?("Longest Response Time: ")
+      assert page.has_content?("Shortest Response Time: ")
+      assert page.has_content?("Average Response Time: ")
     end
 
-    within("#events_link") do
-      assert find_link("Events").visible?
+    within("#request_types") do
+      assert page.has_content?("GET")
+    end
+
+    within ("#referrers") do
+      assert page.has_content?("Most Popular Referrers: ")
+    end
+
+    within ("#user_agents") do
+      assert page.has_content?("Most Popular Browser: ")
+      assert page.has_content?("Most Popular Operating System: ")
     end
   end
 
-  def test_user_sees_error_message_when_identifier_does_not_exist
-    visit "/sources/jumpstartlabsss"
+  def test_user_sees_error_message_when_url_does_not_exist
+    visit "/sources/jumpstartlab/urls/blargh"
 
-    assert_equal "/sources/jumpstartlabsss", current_path
+    assert_equal "/sources/jumpstartlab/urls/blargh", current_path
     assert page.has_content?("Error Page")
-    assert page.has_content?("The identifier jumpstartlabsss does not exist")
+    assert page.has_content?("The requested url '/blargh' does not exist")
   end
 
   def setup

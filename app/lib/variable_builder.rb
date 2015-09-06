@@ -1,11 +1,12 @@
 class VariableBuilder
-  attr_reader :source, :source_visits, :user_agents, :urls
+  attr_reader :source, :source_visits, :user_agents, :urls, :params
 
-  def initialize(source)
+  def initialize(source, params=nil)
     @source = source
     @source_visits = Visit.where(source_id: source.id)
     @user_agents = source_visits.map {|visit| UserAgent.parse(visit.user_agent)}
     @urls = Url.where(source_id: source.id)
+    @params = params
   end
 
   def source_data
@@ -21,11 +22,19 @@ class VariableBuilder
     {url: url,
      url_visits: url_visits,
      refs: refs,
-     os: os,
-     browsers: browsers}
+     os_platforms: os_platforms,
+     browsers: user_browsers}
+  end
+
+  def valid_url?
+    !url.empty?
   end
 
   private
+
+  def url
+    urls.select{|url| url.address.include?(params[:relative_path])}
+  end
 
   def identifier
     source.identifier.capitalize
@@ -69,10 +78,6 @@ class VariableBuilder
     url_visits.group(:referred_by).count.max_by(5) do |key, value|
       value
     end
-  end
-
-  def url
-    urls.select{|url| url.address.include?(params[:relative_path])}
   end
 
   def url_visits

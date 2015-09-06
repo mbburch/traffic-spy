@@ -35,14 +35,19 @@ module TrafficSpy
       end
     end
 
-    not_found do
-      erb :error
+    get '/sources/:identifier/urls/:relative_path' do
+        source = Source.find_by(identifier: params[:identifier])
+        builder = VariableBuilder.new(source, params)
+      if builder.valid_url?
+        erb :url_stats, locals: builder.url_data
+      else
+        @error_message = "The requested url '/#{params[:relative_path]}' has not been requested"
+        erb :error
+      end
     end
 
-    get '/sources/:identifier/urls/:relative_path' do
-      source = Source.find_by(identifier: params[:identifier])
-      builder = VariableBuilder.new(source)
-      erb :url_stats, locals: builder.url_data
+    not_found do
+      erb :error
     end
 
     private

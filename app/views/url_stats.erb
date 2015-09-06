@@ -3,7 +3,7 @@
 </div>
 
 <div class="row">
-  <div class="col-md-6" id="urls">
+  <div class="col-md-3" id="response_times">
     <h3>URL Response Times</h3>
     <ul>
       <li>Maximum Response Time: <%= url_visits.maximum("responded_in").to_i %>ms</li>
@@ -12,7 +12,7 @@
     </ul>
   </div>
 
-  <div class="col-md-6" id="urls">
+  <div class="col-md-3" id="request_types">
     <h3>HTTP Verbs Used</h3>
     <ul>
       <li>HTTP GET: <%= url_visits.where(request_type: "GET").count %></li>
@@ -22,7 +22,7 @@
     </ul>
   </div>
 
-  <div class="col-md-6" id="urls">
+  <div class="col-md-3" id="referrers">
     <h3>Most Popular Referrers</h3>
     <ol>
       <% refs.each do |ref,count| %>
@@ -30,4 +30,25 @@
       <% end %>
     </ol>
   </div>
+
+  <div class="col-md-3" id="user_agents">
+    <div>
+      <h3>Most Popular Browsers</h3>
+      <ol>
+        <% browsers.each do |browser,count| %>
+        <li><%= "#{browser}: #{count}" %></li>
+        <% end %>
+      </ol>
+    </div>
+
+    <div>
+      <h3>Most Popular Operating Systems</h3>
+      <ol>
+        <% os_platforms.each do |os_platform,count| %>
+        <li><%= "#{os_platform}: #{count}" %></li>
+        <% end %>
+      </ol>
+    </div>
+  </div>
+
 </div>

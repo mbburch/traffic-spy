@@ -6,9 +6,9 @@ class UserViewsUrlStatistics < FeatureTest
     visit "/sources/jumpstartlab/urls/blog"
 
     within("#response_times") do
-      assert page.has_content?("Longest Response Time: ")
-      assert page.has_content?("Shortest Response Time: ")
-      assert page.has_content?("Average Response Time: ")
+      assert page.has_content?("Maximum Response Time: 77")
+      assert page.has_content?("Minimum Response Time: 29")
+      assert page.has_content?("Average Response Time: 46")
     end
 
     within("#request_types") do
@@ -16,12 +16,14 @@ class UserViewsUrlStatistics < FeatureTest
     end
 
     within ("#referrers") do
-      assert page.has_content?("Most Popular Referrers: ")
+      assert page.has_content?("Most Popular Referrers")
     end
 
     within ("#user_agents") do
-      assert page.has_content?("Most Popular Browser: ")
-      assert page.has_content?("Most Popular Operating System: ")
+      assert page.has_content?("Most Popular Browsers")
+      assert page.has_content?("Chrome")
+      assert page.has_content?("Most Popular Operating Systems")
+      assert page.has_content?("Macintosh")
     end
   end
 
@@ -30,7 +32,7 @@ class UserViewsUrlStatistics < FeatureTest
 
     assert_equal "/sources/jumpstartlab/urls/blargh", current_path
     assert page.has_content?("Error Page")
-    assert page.has_content?("The requested url '/blargh' does not exist")
+    assert page.has_content?("The requested url '/blargh' has not been requested")
   end
 
   def setup
@@ -39,28 +41,22 @@ class UserViewsUrlStatistics < FeatureTest
                root_url: "http://jumpstartlab.com" }
     Source.create(source_seed_data)
     payload_hash
-    payload_hash("2",2)
-    payload_hash("3")
+    payload_hash("2",29)
+    payload_hash("3", 43)
+    payload_hash("4", 77)
     url_seed_data = { address: "http://jumpstartlab.com/blog",
-                      source_id: 1,
-                      visits_count: 2,
-                      average_response_time: 46 }
-    url_seed_data2 = { address: "http://jumpstartlab.com/about",
-                       source_id: 1,
-                       visits_count: 1,
-                       average_response_time: 37 }
+                      source_id: 1}
     Url.create(url_seed_data)
-    Url.create(url_seed_data2)
   end
 
   def teardown
     DatabaseCleaner.clean
   end
 
-  def payload_hash(sha_id = "1", url_id = 1)
-    params = {url_id: url_id,
+  def payload_hash(sha_id = "1", responded_in = 37)
+    params = {url_id: 1,
                requested_at: "2013-02-16 21:38:28 -0700",
-               responded_in: 37,
+               responded_in: responded_in,
                referred_by: "http://jumpstartlab.com",
                request_type: "GET",
                parameters: [],

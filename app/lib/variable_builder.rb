@@ -1,15 +1,15 @@
 class VariableBuilder
-  attr_reader :params, :source, :visits, :user_agents, :urls
+  attr_reader :source, :source_visits, :user_agents, :urls, :params
 
-  def initialize(params, source)
-    @params = params
+  def initialize(source, params=nil)
     @source = source
-    @visits = Visit.where(source_id: source.id)
-    @user_agents = visits.map {|visit| UserAgent.parse(visit.user_agent)}
+    @source_visits = Visit.where(source_id: source.id)
+    @user_agents = source_visits.map {|visit| UserAgent.parse(visit.user_agent)}
     @urls = Url.where(source_id: source.id)
+    @params = params
   end
 
-  def variables
+  def source_data
     {identifier: identifier,
      addresses: addresses,
      screen_resolutions: screen_resolutions,
@@ -18,7 +18,23 @@ class VariableBuilder
      url_response_times: url_response_times}
   end
 
+  def url_data
+    {url: url,
+     url_visits: url_visits,
+     refs: refs,
+     os_platforms: os_platforms,
+     browsers: user_browsers}
+  end
+
+  def valid_url?
+    !url.empty?
+  end
+
   private
+
+  def url
+    urls.select{|url| url.address.include?(params[:relative_path])}
+  end
 
   def identifier
     source.identifier.capitalize
@@ -30,7 +46,7 @@ class VariableBuilder
   end
 
   def screen_resolutions
-    resolutions = visits.map do |visit|
+    resolutions = source_visits.map do |visit|
       "#{visit.resolution_width}x#{visit.resolution_height}"
     end
     resolutions.uniq
@@ -56,6 +72,16 @@ class VariableBuilder
       [url.address, url.average_response_time, path]
     end
     raw_times.max_by(raw_times.count) {|address, time| time}
+  end
+
+  def refs
+    url_visits.group(:referred_by).count.max_by(5) do |key, value|
+      value
+    end
+  end
+
+  def url_visits
+    Visit.where(url_id: url.first.id)
   end
 
 end

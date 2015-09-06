@@ -27,8 +27,8 @@ module TrafficSpy
 
     get '/sources/:identifier' do
       if source = Source.find_by(identifier: params[:identifier])
-        builder = VariableBuilder.new(params, source)
-        erb :show, locals: builder.variables
+        builder = VariableBuilder.new(source)
+        erb :show, locals: builder.source_data
       else
         erb :error
       end
@@ -39,12 +39,9 @@ module TrafficSpy
     end
 
     get '/sources/:identifier/urls/:relative_path' do
-      source_id = Source.find_by(identifier: params[:identifier])
-      urls = Url.where(source_id: source_id)
-      url = urls.select{|url| url.address.include?(params[:relative_path])}
-      visits = Visit.where(url_id: url.first.id)
-      refs = top_referrers(visits)
-      erb :url_stats, :locals => {:url => url, :visits => visits, :refs => refs}
+      source = Source.find_by(identifier: params[:identifier])
+      builder = VariableBuilder.new(source)
+      erb :url_stats, locals: builder.url_data
     end
 
     private
@@ -57,10 +54,5 @@ module TrafficSpy
       attributes
     end
 
-    def top_referrers(visits)
-      visits.group(:referred_by).count.max_by(5) do |key, value|
-        value
-      end
-    end
   end
 end

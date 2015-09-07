@@ -6,6 +6,7 @@ gem 'activerecord'
 gem 'sinatra-activerecord'
 gem 'byebug'
 gem 'useragent'
+gem 'sinatra-partial', require: 'sinatra/partial'
 
 group :development, :test do
   gem 'shotgun'

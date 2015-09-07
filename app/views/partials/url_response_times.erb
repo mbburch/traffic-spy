@@ -1,0 +1,6 @@
+<h3>URL Response Times</h3>
+<ul>
+  <li>Maximum Response Time: <%= url_visits.maximum("responded_in").to_i %>ms</li>
+  <li>Minimum Response Time: <%= url_visits.minimum("responded_in").to_i %>ms</li>
+  <li>Average Response Time: <%= url_visits.average("responded_in").to_i %>ms</li>
+</ul>

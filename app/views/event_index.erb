@@ -1,0 +1,16 @@
+<div class="page-header">
+  <h1><%= params[:identifier].capitalize %> Event Index</h1>
+</div>
+<div class="col-md-12" id="event_listing">
+  <h3>Received Events</h3>
+  <ol>
+    <% @events.each do |event,count| %>
+    <li><a href="/sources/<%="#{params[:identifier].downcase}"%>/events/<%=
+    "#{event}"%>"><%="#{event}"%></a><%=": #{count}" %></li>
+    <% end %>
+  </ol>
+</div>
+
+
+
+

@@ -1,0 +1,26 @@
+<div class="page-header">
+  <h1><%= params[:identifier].capitalize%> <%= params[:eventname]%> Event Details</h1>
+</div>
+
+<div id="hour_event_received">
+  <h3>Breakdown of Time Received</h3>
+  <table>
+    <tr>
+      <th>Time Received</th>
+      <th>Number Received</th>
+    </tr>
+    <%counter = 0%>
+    <%24.times do%>
+      <tr>
+        <td class="time-received"><%="#{counter}:00".rjust(5, "0")%></td>
+        <td class="number-received"><%=@visits_by_time[counter]%></td>
+      </tr>
+      <%counter +=1%>
+    <%end%>
+  </table>
+</div>
+
+<div id="total_received">
+  <h3>Total Times Event Received</h3>
+  <p><%=@total_received%></p>
+</div>

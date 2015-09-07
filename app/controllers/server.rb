@@ -61,6 +61,23 @@ module TrafficSpy
       end
     end
 
+    get '/sources/:identifier/events/:eventname' do
+      source = Source.find_by(identifier: params[:identifier])
+      if event = Event.find_by(name: params[:eventname], source_id: source.id)
+        event_visits = Visit.where(event_id: event.id)
+        @total_received = event_visits.count
+        @visits_by_time = event_visits.map.with_object(Hash.new(0)) do |event, hash|
+          visit_hour = (event[:requested_at]).hour
+          hash[visit_hour] += 1
+        end
+        erb :event_details
+      else
+        @error_message = "<p>The event #{params[:eventname]} has not been defined.
+        Return to the Application Events Index.</p><p><a href='/sources/#{params[:identifier]}/events'>#{params[:identifier]} Events</a></p>"
+        erb :error
+      end
+    end
+
     not_found do
       erb :error
     end

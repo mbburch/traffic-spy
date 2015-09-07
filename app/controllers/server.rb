@@ -1,5 +1,6 @@
 module TrafficSpy
   class Server < Sinatra::Base
+    register Sinatra::Partial
 
     get '/' do
       erb :index

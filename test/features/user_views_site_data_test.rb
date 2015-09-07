@@ -58,9 +58,9 @@ class UserViewsSiteDataTest < FeatureTest
     source_seed_data = { identifier: "jumpstartlab",
                root_url: "http://jumpstartlab.com" }
     Source.create(source_seed_data)
-    payload_hash
-    payload_hash("2",2)
-    payload_hash("3")
+    create_visit
+    create_visit("2",2)
+    create_visit("3")
     url_seed_data = { address: "http://jumpstartlab.com/blog",
                       source_id: 1,
                       visits_count: 2,
@@ -77,14 +77,14 @@ class UserViewsSiteDataTest < FeatureTest
     DatabaseCleaner.clean
   end
 
-  def payload_hash(sha_id = "1", url_id = 1)
+  def create_visit(sha_id = "1", url_id = 1)
     params = {url_id: url_id,
                requested_at: "2013-02-16 21:38:28 -0700",
                responded_in: 37,
                referred_by: "http://jumpstartlab.com",
                request_type: "GET",
                parameters: [],
-               event_name: "socialLogin",
+               event_id: 1,
                user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17",
                resolution_width: "1920",
                resolution_height: "1280",

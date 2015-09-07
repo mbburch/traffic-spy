@@ -1,9 +1,9 @@
 
-  <h1><%= identifier %> Site Data</h1>
+  <h1 class="page-header jumbotron"><%= identifier %> Site Data</h1>
 
 
-<div class="row">
-  <div class="col-md-3" id="urls">
+<div class="thumbnails">
+  <div class="col-md-3 thumbnail" id="urls">
     <h3>Requested URLs</h3>
     <ol>
       <% addresses.each do |address, count|%>
@@ -12,7 +12,7 @@
     </ol>
   </div>
 
-  <div class="col-md-3" id="browsers">
+  <div class="col-md-3 thumbnail" id="browsers">
     <h3>Web Browser Breakdown</h3>
     <ol>
       <% browsers.each do |browser, count|%>
@@ -21,7 +21,7 @@
     </ol>
   </div>
 
-  <div class="col-md-3" id="os">
+  <div class="col-md-3 thumbnail" id="os">
     <h3>OS Breakdown</h3>
     <ol>
       <% os_platforms.each do |os_platform, count|%>
@@ -30,7 +30,7 @@
     </ol>
   </div>
 
-  <div class="col-md-3" id="screen_resolutions">
+  <div class="col-md-3 thumbnail" id="screen_resolutions">
     <h3>Screen Resolutions</h3>
     <ul>
       <% screen_resolutions.each do |resolution|%>
@@ -40,7 +40,7 @@
   </div>
 </div>
 
-<div class="col-md-4" id="response_times">
+<div class="col-md-4 well" id="response_times">
   <h3>URL Average Response Times</h3>
   <ol>
     <% url_response_times.each do |address, time, relative_path|%>
@@ -49,6 +49,6 @@
   </ol>
 </div>
 
-<div class="col-md-8" id="events_link">
+<div class="col-md-8 btn btn-default" id="events_link">
   <h3><a href="/sources/<%="#{identifier.downcase}"%>/events">Events</a></h3>
 </div>

@@ -22,6 +22,7 @@ class UserViewsEventDetailsTest < FeatureTest
     assert_equal "/sources/jumpstartlabs/events/xlakjd", current_path
     assert page.has_content?("Error Page")
     assert page.has_content?("The event xlakjd has not been defined")
+    assert assert find_link("Application Events Index").visible?
   end
 
 end

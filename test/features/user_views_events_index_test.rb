@@ -6,7 +6,7 @@ class UserViewsEventsIndexTest < FeatureTest
     event_seed_data = { source_id: 1,
                       name: "Social Login" }
     event_seed_data2 = { source_id: 1,
-                      name: "Begin Registration" }
+                      name: "Started Registration" }
     Event.create(event_seed_data)
     Event.create(event_seed_data2)
     create_visit
@@ -18,9 +18,9 @@ class UserViewsEventsIndexTest < FeatureTest
     within("#event_listing") do
       assert page.has_content?("Received Events")
       assert page.has_content?("Social Login: ")
-      assert page.has_content?("Begin Registration: ")
+      assert page.has_content?("Started Registration: ")
       assert find_link("Social Login").visible?
-      assert find_link("Begin Registration").visible?
+      assert find_link("Started Registration").visible?
     end
   end
 

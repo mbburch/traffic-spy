@@ -50,10 +50,10 @@ module TrafficSpy
       source = Source.find_by(identifier: params[:identifier])
       received_events = Event.where(source_id: source.id)
       if !received_events.empty?
-        @events = received_events.group(:name).count
-        # max_by(received_events.uniq.count) do |key, val|
-        #   val
-        # end
+        e_count = received_events.count
+        @events = received_events.group(:name).count.max_by(e_count) do |k, v|
+          v
+        end
         erb :event_index
       else
         @error_message = "No events have been defined"

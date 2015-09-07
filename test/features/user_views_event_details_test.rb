@@ -80,3 +80,5 @@ class UserViewsEventDetailsTest < FeatureTest
   end
 
 end
+
+

@@ -1,1 +1,12 @@
-<h1>Welcome to TrafficSpy</h1>
+<h1 class = 'jumbotron'>Welcome to Traffic Spy</h1>
+
+<div class="panel panel-default text-center">
+  <div class="panel-heading">Sources</div>
+    <div class="panel-body">
+     <%Source.all.each do |source|%>
+      <div class="btn btn-default"><a href="/sources/<%=source.identifier%>"><%=source.identifier.capitalize%></a></div>
+      <%end%>
+    </div>
+  </div>
+</div>
+

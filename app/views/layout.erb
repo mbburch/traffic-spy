@@ -2,12 +2,20 @@
   <html>
   <head>
     <link href="/bootstrap.css" rel="stylesheet">
-    <link href="/styles.css" rel="stylesheet">
+    <link href="/application.css" rel="stylesheet">
     <title>Traffic Spy</title>
   </head>
   <body>
-    <div class='container'>
+
+      <nav class='navbar navbar-default'>
+        <div class='container-fluid'>
+          <nav class='navbar-brand'>Traffic Spy</nav>
+          <span><a href="/" class="navbar-link navbar-center navbar-text">Sources Index</a></span>
+        </div>
+      </nav>
+
+    <div class='container-fluid'>
       <%= yield %>
-    </div>    
+    </div>
   </body>
   </html>

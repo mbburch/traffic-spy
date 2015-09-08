@@ -1,12 +1,14 @@
-<div class="page-header">
+<div class="jumbotron">
   <h1><%= params[:identifier].capitalize%> <%= params[:eventname]%> Event Details</h1>
 </div>
 
-<div id="hour_event_received">
-  <%=partial :'partials/hour_event_received'%>
-</div>
+<div class="row">
+  <div class="col-md-8 well" id="total_received">
+    <h3>Total Times Event Received: <%=@total_received%></h3>
+  </div>
+  </div>
 
-<div id="total_received">
-  <h3>Total Times Event Received</h3>
-  <p><%=@total_received%></p>
+  <div class="col-md-4" id="hour_event_received">
+    <%=partial :'partials/hour_event_received'%>
+  </div>
 </div>

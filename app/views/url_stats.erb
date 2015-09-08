@@ -1,25 +1,25 @@
-<div class="page-header">
-  <h1><%= url.first.address %> Site Data</h1>
+<div class="jumbotron">
+  <h1> Site Data for: <%= url.first.address %></h1>
 </div>
 
 <div class="row">
-  <div class="col-md-3" id="response_times">
+  <div class="col-md-3 well" id="url_response_times">
     <%=partial :'partials/url_response_times', locals: locals%>
   </div>
 
-  <div class="col-md-3" id="request_types">
+  <div class="col-md-3 well" id="request_types">
     <%=partial :'partials/url_request_types', locals: locals%>
   </div>
 
-  <div class="col-md-3" id="referrers">
+  <div class="col-md-3 well" id="referrers">
     <%=partial :'partials/url_referrers', locals: locals%>
   </div>
 
-  <div class="col-md-3" id="user_agents">
+  <div class="col-md-3 well" id="user_agents">
+    <h3>User Agent Information</h3>
     <div>
       <%=partial :'partials/popular_browsers', locals: locals%>
     </div>
-
     <div>
       <%=partial :'partials/popular_os', locals: locals%>
     </div>

@@ -1,7 +1,8 @@
 <h3>Received Events</h3>
 <ol>
   <% @events.each do |event,count| %>
-  <li><a href="/sources/<%="#{params[:identifier].downcase}"%>/events/<%=
+  <li class="event-items"><a href="/sources/<%="#{params[:identifier].downcase}"%>/events/<%=
   "#{event}"%>"><%="#{event}"%></a><%=": #{count}" %></li>
   <% end %>
 </ol>
+

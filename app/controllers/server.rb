@@ -42,7 +42,8 @@ module TrafficSpy
       if builder.valid_url?
         erb :url_details, locals: builder.url_data
       else
-        @error_message = "The requested url '/#{params[:relative_path]}' has not been requested"
+        @error_message =
+        "The requested url '/#{params[:relative_path]}' has not been requested"
         erb :error
       end
     end
@@ -67,14 +68,17 @@ module TrafficSpy
       if event = Event.find_by(name: params[:eventname], source_id: source.id)
         event_visits = Visit.where(event_id: event.id)
         @total_received = event_visits.count
-        @visits_by_time = event_visits.map.with_object(Hash.new(0)) do |event, hash|
+        @hour_hits = event_visits.map.with_object(Hash.new(0)) do |event, hash|
           visit_hour = (event[:requested_at]).hour
           hash[visit_hour] += 1
         end
         erb :event_details
       else
-        @error_message = "<p>The event #{params[:eventname]} has not been defined.
-        Return to the Application Events Index.</p><p><a href='/sources/#{params[:identifier]}/events'>#{params[:identifier]} Events</a></p>"
+        @error_message =
+        "<p>The event #{params[:eventname]} has not been defined.
+        Return to the Application Events Index.</p>
+        <p><a href='/sources/#{params[:identifier]}/events'>
+        #{params[:identifier]} Events</a></p>"
         erb :error
       end
     end
@@ -89,7 +93,8 @@ module TrafficSpy
       attributes = JSON.parse(params[:payload])
       sha_identifier = Digest::SHA1.hexdigest(params[:payload])
       attributes[:sha_identifier] = sha_identifier
-      attributes[:source_id] = Source.find_by(identifier: params[:identifier]).id
+      source = Source.find_by(identifier: params[:identifier])
+      attributes[:source_id] = source.id
       attributes
     end
 

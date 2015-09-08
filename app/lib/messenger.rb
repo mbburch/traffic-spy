@@ -9,9 +9,7 @@ class Messenger
       url = find_or_create_url
       attributes.delete(:url)
       attributes[:url_id] = url.id
-      event = Event.find_or_create_by(name: attributes[:event_name],
-                                      source_id: attributes[:source_id])
-      event.save if event.valid?
+      event = find_or_create_event
       attributes.delete(:event_name)
       attributes[:event_id] = event.id
 
@@ -77,6 +75,13 @@ class Messenger
     url.source_id = attributes[:source_id]
     url.save if url.valid?
     url
+  end
+
+  def find_or_create_event
+    event = Event.find_or_create_by(name: attributes[:event_name],
+                                    source_id: attributes[:source_id])
+    event.save if event.valid?
+    event
   end
 
 end

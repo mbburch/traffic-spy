@@ -26,7 +26,7 @@ module TrafficSpy
       end
     end
 
-    get '/sources/:identifier?.json' do
+    get '/sources/:identifier?.json/?' do
       if source = Source.find_by(identifier: params[:identifier])
         builder = VariableBuilder.new(source)
         builder.source_data.to_json
@@ -46,18 +46,19 @@ module TrafficSpy
       end
     end
 
-    get '/sources/:identifier.json' do
-      content_type :json
-      if source = Source.find_by(identifier: params[:identifier])
-        builder = VariableBuilder.new(source)
-        builder.source_data.to_json
+    get '/sources/:identifier/urls/:relative_path?.json/?' do
+        source = Source.find_by(identifier: params[:identifier])
+        builder = VariableBuilder.new(source, params)
+      if builder.valid_url?
+        builder.url_data.to_json
       else
-        error_message = "The identifier #{params[:identifier]} does not exist"
+        error_message =
+        "The requested url '/#{params[:relative_path]}' has not been requested"
         {error: error_message}.to_json
       end
     end
 
-    get '/sources/:identifier/urls/:relative_path' do
+    get '/sources/:identifier/urls/:relative_path/?' do
         source = Source.find_by(identifier: params[:identifier])
         builder = VariableBuilder.new(source, params)
       if builder.valid_url?
@@ -69,7 +70,22 @@ module TrafficSpy
       end
     end
 
-    get '/sources/:identifier/events' do
+    get '/sources/:identifier/events?.json/?' do
+      source = Source.find_by(identifier: params[:identifier])
+      received_events = Event.where(source_id: source.id)
+      if !received_events.empty?
+        e_count = received_events.count
+        events = received_events.group(:name).count.max_by(e_count) do |k, v|
+          v
+        end
+        {event_index: events}.to_json
+      else
+        @error_message = "No events have been defined"
+        {error: error_message}.to_json
+      end
+    end
+
+    get '/sources/:identifier/events/?' do
       source = Source.find_by(identifier: params[:identifier])
       received_events = Event.where(source_id: source.id)
       if !received_events.empty?
@@ -84,7 +100,28 @@ module TrafficSpy
       end
     end
 
-    get '/sources/:identifier/events/:eventname' do
+    get '/sources/:identifier/events/:eventname?.json/?' do
+      source = Source.find_by(identifier: params[:identifier])
+      if event = Event.find_by(name: params[:eventname], source_id: source.id)
+        event_visits = Visit.where(event_id: event.id)
+        total_received = event_visits.count
+        hour_hits = event_visits.map.with_object(Hash.new(0)) do |event, hash|
+          visit_hour = (event[:requested_at]).hour
+          hash[visit_hour] += 1
+        end
+        {event_details: {total_event_visits: total_received,
+                         event_by_hour_hits: hour_hits}}.to_json
+      else
+        @error_message =
+        "<p>The event #{params[:eventname]} has not been defined.
+        Return to the Application Events Index.</p>
+        <p><a href='/sources/#{params[:identifier]}/events'>
+        #{params[:identifier]} Events</a></p>"
+        {error: error_message}.to_json
+      end
+    end
+
+    get '/sources/:identifier/events/:eventname/?' do
       source = Source.find_by(identifier: params[:identifier])
       if event = Event.find_by(name: params[:eventname], source_id: source.id)
         event_visits = Visit.where(event_id: event.id)

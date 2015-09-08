@@ -1,31 +1,31 @@
-<div class="page-header">
-  <h1><%= identifier %> Site Data</h1>
-</div>
+<h1 class="jumbotron"><%= identifier %> Site Data</h1>
 
 <div class="row">
 
-  <div class="col-md-3" id="urls">
+  <div class="col-md-3 well" id="urls">
     <%=partial(:"partials/addresses", :locals => locals)%>
   </div>
 
-  <div class="col-md-3" id="browsers">
+  <div class="col-md-3 well" id="browsers">
     <%=partial(:"partials/browsers", :locals => locals)%>
   </div>
 
-  <div class="col-md-3" id="os">
+  <div class="col-md-3 well" id="os">
     <%=partial(:"partials/os_breakdown", :locals => locals)%>
   </div>
 
-  <div class="col-md-3" id="screen_resolutions">
+  <div class="col-md-3 well" id="screen_resolutions">
     <%=partial(:"partials/screen_resolutions", :locals => locals)%>
   </div>
 
 </div>
 
-<div class="col-md-4" id="response_times">
-  <%=partial(:"partials/response_times", :locals => locals)%>
-</div>
+<div class="row">
+  <div class="col-md-6 well" id="response_times">
+    <%=partial(:"partials/response_times", :locals => locals)%>
+  </div>
 
-<div class="col-md-8" id="events_link">
-  <h3><a href="/sources/<%="#{identifier.downcase}"%>/events">Events</a></h3>
+  <div class="col-md-6 well" id="events_link">
+    <h3><a href="/sources/<%="#{identifier.downcase}"%>/events" class="btn-lg btn-primary btn-block">Events</a></h3>
+  </div>
 </div>

@@ -27,7 +27,7 @@ class ServerTest < Minitest::Test
                rootUrl: "http://jumpstartlab.com" }
     create_source
     post "/sources", params
-    
+
     assert_equal 1, Source.count
     assert_equal 403, last_response.status
     assert_equal "Non-unique Value: Identifier has already been taken", last_response.body
@@ -82,6 +82,72 @@ class ServerTest < Minitest::Test
     assert_equal "Application Not Registered", last_response.body
   end
 
+  def test_it_does_not_create_a_campaign_when_campaign_has_been_received
+    create_source
+    create_campaign
+    params = campaign_params
+    post "/sources/jumpstartlab/campaigns", params
+    post "/sources/jumpstartlab/campaigns", params
+
+    assert_equal 403, last_response.status
+    assert_equal "Campaign Already Registered", last_response.body
+  end
+
+  def test_it_does_not_create_campaigns_when_missing_both_parameters
+    create_source
+    params = {}
+    post "/sources/jumpstartlab/campaigns", params
+
+    assert_equal 400, last_response.status
+    assert_equal "Missing Parameters", last_response.body
+  end
+
+  def test_it_does_not_create_campaigns_when_missing_event_names_params
+    create_source
+    params = 'campaignName=socialSignup'
+    post "/sources/jumpstartlab/campaigns", params
+
+    assert_equal 400, last_response.status
+    assert_equal "Missing Parameters", last_response.body
+  end
+
+  def test_it_does_not_create_campaigns_when_missing_campaign_params
+    create_source
+    params = 'eventNames[]=registrationStep1'
+    post "/sources/jumpstartlab/campaigns", params
+
+    assert_equal 400, last_response.status
+    assert_equal "Missing Parameters", last_response.body
+  end
+
+  def test_it_does_not_create_campaign_with_an_invalid_identifier
+    create_source
+    params = campaign_params
+    post "/sources/jumpstartlabsss/campaigns", params
+
+    assert_equal 403, last_response.status
+    assert_equal "Application Not Registered", last_response.body
+  end
+
+  def test_it_creates_a_campaign_and_registered_event
+    create_source
+    params = campaign_params
+    post "/sources/jumpstartlab/campaigns", params
+
+    assert_equal 1, Campaign.count
+    assert_equal 2, RegisteredEvent.count
+    assert_equal 1, Campaign.first.id
+    assert_equal 1, Campaign.first.source_id
+    assert_equal 'socialSignup', Campaign.first.name
+    assert_equal 1, RegisteredEvent.first.id
+    assert_equal 1, RegisteredEvent.first.campaign_id
+    assert_equal 'registrationStep1', RegisteredEvent.first.event_name
+    assert_equal 2, RegisteredEvent.last.id
+    assert_equal 1, RegisteredEvent.last.campaign_id
+    assert_equal 'registrationStep2', RegisteredEvent.last.event_name
+  end
+
+
   def setup
     DatabaseCleaner.start
   end
@@ -98,6 +164,22 @@ class ServerTest < Minitest::Test
     seed_data = { identifier: "jumpstartlab",
                root_url: "http://jumpstartlab.com" }
     Source.create(seed_data)
+  end
+
+  def create_campaign
+    seed_data = {name: "socialSignup",
+     source_id: 1 }
+     Campaign.create(seed_data)
+  end
+
+  def create_registered_event
+    seed_data = {event_name: "registrationStep1",
+     campaign_id: 1}
+     RegisteredEvent.new(seed_data)
+  end
+
+  def campaign_params
+    'campaignName=socialSignup&eventNames[]=registrationStep1eventNames[]=registrationStep2'
   end
 
   def payload_hash

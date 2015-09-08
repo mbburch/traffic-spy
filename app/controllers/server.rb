@@ -6,13 +6,13 @@ module TrafficSpy
       erb :index
     end
 
-    post '/sources' do
+    post '/sources/?' do
       messenger = Messenger.new(params, "Source")
       status messenger.status
       body messenger.message
     end
 
-    post '/sources/:identifier/data' do
+    post '/sources/:identifier/data/?' do
       if !Source.find_by(identifier: params[:identifier])
         status 403
         body "Application Not Registered"
@@ -26,7 +26,17 @@ module TrafficSpy
       end
     end
 
-    get '/sources/:identifier' do
+    get '/sources/:identifier?.json' do
+      if source = Source.find_by(identifier: params[:identifier])
+        builder = VariableBuilder.new(source)
+        builder.source_data.to_json
+      else
+        error_message = "The identifier #{params[:identifier]} does not exist"
+        {error: error_message}.to_json
+      end
+    end
+
+    get '/sources/:identifier/?' do
       if source = Source.find_by(identifier: params[:identifier])
         builder = VariableBuilder.new(source)
         erb :site_data, locals: builder.source_data

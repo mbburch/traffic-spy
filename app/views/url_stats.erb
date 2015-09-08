@@ -4,50 +4,24 @@
 
 <div class="row">
   <div class="col-md-3" id="response_times">
-    <h3>URL Response Times</h3>
-    <ul>
-      <li>Maximum Response Time: <%= url_visits.maximum("responded_in").to_i %>ms</li>
-      <li>Minimum Response Time: <%= url_visits.minimum("responded_in").to_i %>ms</li>
-      <li>Average Response Time: <%= url_visits.average("responded_in").to_i %>ms</li>
-    </ul>
+    <%=partial :'partials/url_response_times', locals: locals%>
   </div>
 
   <div class="col-md-3" id="request_types">
-    <h3>HTTP Verbs Used</h3>
-    <ul>
-      <li>HTTP GET: <%= url_visits.where(request_type: "GET").count %></li>
-      <li>HTTP PUT: <%= url_visits.where(request_type: "PUT").count %></li>
-      <li>HTTP POST: <%= url_visits.where(request_type: "POST").count %></li>
-      <li>HTTP DELETE: <%= url_visits.where(request_type: "DELETE").count %></li>
-    </ul>
+    <%=partial :'partials/url_request_types', locals: locals%>
   </div>
 
   <div class="col-md-3" id="referrers">
-    <h3>Most Popular Referrers</h3>
-    <ol>
-      <% refs.each do |ref,count| %>
-      <li><%= "#{ref}: #{count}" %></li>
-      <% end %>
-    </ol>
+    <%=partial :'partials/url_referrers', locals: locals%>
   </div>
 
   <div class="col-md-3" id="user_agents">
     <div>
-      <h3>Most Popular Browsers</h3>
-      <ol>
-        <% browsers.each do |browser,count| %>
-        <li><%= "#{browser}: #{count}" %></li>
-        <% end %>
-      </ol>
+      <%=partial :'partials/popular_browsers', locals: locals%>
     </div>
 
     <div>
-      <h3>Most Popular Operating Systems</h3>
-      <ol>
-        <% os_platforms.each do |os_platform,count| %>
-        <li><%= "#{os_platform}: #{count}" %></li>
-        <% end %>
-      </ol>
+      <%=partial :'partials/popular_os', locals: locals%>
     </div>
   </div>
 

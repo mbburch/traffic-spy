@@ -1,12 +1,13 @@
 class Visit < ActiveRecord::Base
   belongs_to :url
   belongs_to :source
+  belongs_to :event
   validates :sha_identifier, presence: true, uniqueness: true
   validates :responded_in, presence: true
   validates :requested_at, presence: true
   validates :referred_by, presence: true
   validates :request_type, presence: true
-  validates :event_name, presence: true
+  validates :event_id, presence: true
   validates :user_agent, presence: true
   validates :resolution_width, presence: true
   validates :resolution_height, presence: true

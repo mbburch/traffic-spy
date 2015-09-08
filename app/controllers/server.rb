@@ -1,5 +1,6 @@
 module TrafficSpy
   class Server < Sinatra::Base
+    register Sinatra::Partial
 
     get '/' do
       erb :index
@@ -42,6 +43,38 @@ module TrafficSpy
         erb :url_stats, locals: builder.url_data
       else
         @error_message = "The requested url '/#{params[:relative_path]}' has not been requested"
+        erb :error
+      end
+    end
+
+    get '/sources/:identifier/events' do
+      source = Source.find_by(identifier: params[:identifier])
+      received_events = Event.where(source_id: source.id)
+      if !received_events.empty?
+        e_count = received_events.count
+        @events = received_events.group(:name).count.max_by(e_count) do |k, v|
+          v
+        end
+        erb :event_index
+      else
+        @error_message = "No events have been defined"
+        erb :error
+      end
+    end
+
+    get '/sources/:identifier/events/:eventname' do
+      source = Source.find_by(identifier: params[:identifier])
+      if event = Event.find_by(name: params[:eventname], source_id: source.id)
+        event_visits = Visit.where(event_id: event.id)
+        @total_received = event_visits.count
+        @visits_by_time = event_visits.map.with_object(Hash.new(0)) do |event, hash|
+          visit_hour = (event[:requested_at]).hour
+          hash[visit_hour] += 1
+        end
+        erb :event_details
+      else
+        @error_message = "<p>The event #{params[:eventname]} has not been defined.
+        Return to the Application Events Index.</p><p><a href='/sources/#{params[:identifier]}/events'>#{params[:identifier]} Events</a></p>"
         erb :error
       end
     end

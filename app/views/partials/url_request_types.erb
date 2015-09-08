@@ -1,0 +1,7 @@
+<h3>HTTP Verbs Used</h3>
+<ul>
+  <li>HTTP GET: <%= url_visits.where(request_type: "GET").count %></li>
+  <li>HTTP PUT: <%= url_visits.where(request_type: "PUT").count %></li>
+  <li>HTTP POST: <%= url_visits.where(request_type: "POST").count %></li>
+  <li>HTTP DELETE: <%= url_visits.where(request_type: "DELETE").count %></li>
+</ul>

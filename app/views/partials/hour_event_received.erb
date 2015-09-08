@@ -1,0 +1,15 @@
+<h3>Breakdown of Time Received</h3>
+<table>
+  <tr>
+    <th>Time Received</th>
+    <th>Number Received</th>
+  </tr>
+  <%counter = 0%>
+  <%24.times do%>
+    <tr>
+      <td class="time-received"><%="#{counter}:00".rjust(5, "0")%></td>
+      <td class="number-received"><%=@visits_by_time[counter]%></td>
+    </tr>
+    <%counter +=1%>
+  <%end%>
+</table>

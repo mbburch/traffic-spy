@@ -1,0 +1,6 @@
+<h3>URL Average Response Times</h3>
+<ol>
+  <% url_response_times.each do |address, time, relative_path|%>
+    <li><a href="/sources/<%="#{relative_path}"%>"><%= "#{address}"%></a><%=": #{time}ms" %></li>
+  <% end %>
+</ol>

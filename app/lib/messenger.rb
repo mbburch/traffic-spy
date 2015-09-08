@@ -16,6 +16,11 @@ class Messenger
       url.average_response_time = (total_response_time + attributes[:responded_in])/url.visits_count
       attributes.delete(:url)
       attributes[:url_id] = url.id
+      event = Event.find_or_create_by(name: attributes[:event_name],
+                                      source_id: attributes[:source_id])
+      event.save
+      attributes.delete(:event_name)
+      attributes[:event_id] = event.id
       url.save if url.valid?
       @record = url.visits.new(attributes)
     else

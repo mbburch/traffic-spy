@@ -45,7 +45,7 @@ class VisitTest < Minitest::Test
     referred_by: "http://jumpstartlab.com",
     request_type: "GET",
     parameters: "[]",
-    event_name: "IDontCare",
+    event_id: 1,
     user_agent: "STUFF!",
     resolution_width: "1920",
     resolution_height: "1080",

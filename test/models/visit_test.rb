@@ -23,7 +23,6 @@ class VisitTest < Minitest::Test
     visit = Visit.new(attributes)
     visit2 = Visit.new(attributes)
 
-
     assert visit.valid?
     visit.save
     refute visit2.valid?

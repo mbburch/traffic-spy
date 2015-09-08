@@ -81,19 +81,3 @@ class UserViewsEventDetailsTest < FeatureTest
   end
 
 end
-#
-# APPLICATION EVENT DETAILS
-#
-# As a user
-# When I submit a GET request to "sources/jumpstartlabs/events/startedRegistration"
-# And event has been defined
-# Then I should see a page that displays the following:
-#   Hour by hour breakdown of when the event was received. How many were shown at noon? at 1pm? at 2pm? Do it for all 24 hours.
-#   How many times it was recieved overall
-#
-# As a user
-# When I submit a GET request to "sources/jumpstartlabs/events/xlakjd"
-# And event has not been defined
-# Then I should see a page that displays the following:
-#   Message that no event with the given name has been defined
-#   Hyperlink to the Application Events Index

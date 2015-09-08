@@ -24,10 +24,8 @@ class SourceTest < Minitest::Test
   def test_it_does_not_create_source_with_non_unique_attribute
     attributes = {identifier: "jumpstartlab",
                   root_url: "http::/jumpstartlab.com"}
-
     source = Source.new(attributes)
     source2 = Source.new(attributes)
-
 
     assert source.valid?
     source.save

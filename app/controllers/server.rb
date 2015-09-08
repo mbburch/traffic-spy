@@ -29,7 +29,7 @@ module TrafficSpy
     get '/sources/:identifier' do
       if source = Source.find_by(identifier: params[:identifier])
         builder = VariableBuilder.new(source)
-        erb :show, locals: builder.source_data
+        erb :source_details, locals: builder.source_data
       else
         @error_message = "The identifier #{params[:identifier]} does not exist"
         erb :error
@@ -40,7 +40,7 @@ module TrafficSpy
         source = Source.find_by(identifier: params[:identifier])
         builder = VariableBuilder.new(source, params)
       if builder.valid_url?
-        erb :url_stats, locals: builder.url_data
+        erb :url_details, locals: builder.url_data
       else
         @error_message = "The requested url '/#{params[:relative_path]}' has not been requested"
         erb :error

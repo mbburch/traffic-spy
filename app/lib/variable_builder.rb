@@ -41,7 +41,10 @@ class VariableBuilder
   end
 
   def addresses
-    raw_addresses = urls.map {|url| [url.address, url.visits_count]}
+    raw_addresses = urls.map do |url|
+      visits_count = Visit.where(url_id: url.id).count
+      [url.address, visits_count]
+    end
     raw_addresses.max_by(raw_addresses.count) {|address, visits| visits}
   end
 
@@ -69,7 +72,9 @@ class VariableBuilder
   def url_response_times
     raw_times = urls.map do |url|
       path = url.address.gsub(source.root_url, identifier.downcase + "/urls")
-      [url.address, url.average_response_time, path]
+      url_visits = Visit.where(url_id: url.id)
+      average_response_time = url_visits.average("responded_in").to_i
+      [url.address, average_response_time, path]
     end
     raw_times.max_by(raw_times.count) {|address, time| time}
   end

@@ -11,17 +11,15 @@ class Messenger
     if model == "Visit"
       url = Url.find_or_create_by(address: attributes[:url])
       url.source_id = attributes[:source_id]
-      total_response_time = url.average_response_time * url.visits_count
-      url.visits_count += 1
-      url.average_response_time = (total_response_time + attributes[:responded_in])/url.visits_count
       attributes.delete(:url)
       attributes[:url_id] = url.id
+      url.save if url.valid?
       event = Event.find_or_create_by(name: attributes[:event_name],
                                       source_id: attributes[:source_id])
-      event.save
+      event.save if event.valid?
       attributes.delete(:event_name)
       attributes[:event_id] = event.id
-      url.save if url.valid?
+
       @record = url.visits.new(attributes)
     else
       @record = eval(model).new(attributes)

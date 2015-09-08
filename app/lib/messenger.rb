@@ -7,12 +7,8 @@ class Messenger
     @attributes = attribute_array(params).to_h
     if model == "Visit"
       url = find_or_create_url
-      attributes.delete(:url)
-      attributes[:url_id] = url.id
       event = find_or_create_event
-      attributes.delete(:event_name)
-      attributes[:event_id] = event.id
-
+      update_attributes(url, event)
       @record = url.visits.new(attributes)
     else
       @record = eval(model).new(attributes)
@@ -82,6 +78,13 @@ class Messenger
                                     source_id: attributes[:source_id])
     event.save if event.valid?
     event
+  end
+
+  def update_attributes(url, event)
+    attributes.delete(:event_name)
+    attributes[:event_id] = event.id
+    attributes.delete(:url)
+    attributes[:url_id] = url.id
   end
 
 end

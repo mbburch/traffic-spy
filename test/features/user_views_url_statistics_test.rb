@@ -5,7 +5,7 @@ class UserViewsUrlStatistics < FeatureTest
   def test_user_sees_statistics_for_url
     visit "/sources/jumpstartlab/urls/blog"
 
-    within("#response_times") do
+    within("#url_response_times") do
       assert page.has_content?("Maximum Response Time: 77")
       assert page.has_content?("Minimum Response Time: 29")
       assert page.has_content?("Average Response Time: 46")

@@ -1,0 +1,31 @@
+<h1 class="jumbotron"><%= identifier %> Site Data</h1>
+
+<div class="row">
+
+  <div class="col-md-3 well" id="urls">
+    <%=partial(:"partials/addresses", :locals => locals)%>
+  </div>
+
+  <div class="col-md-3 well" id="browsers">
+    <%=partial(:"partials/browsers", :locals => locals)%>
+  </div>
+
+  <div class="col-md-3 well" id="os">
+    <%=partial(:"partials/os_breakdown", :locals => locals)%>
+  </div>
+
+  <div class="col-md-3 well" id="screen_resolutions">
+    <%=partial(:"partials/screen_resolutions", :locals => locals)%>
+  </div>
+
+</div>
+
+<div class="row">
+  <div class="col-md-6 well" id="response_times">
+    <%=partial(:"partials/response_times", :locals => locals)%>
+  </div>
+
+  <div class="col-md-6 well" id="events_link">
+    <h3><a href="/sources/<%="#{identifier.downcase}"%>/events" class="btn-lg btn-primary btn-block">Events</a></h3>
+  </div>
+</div>

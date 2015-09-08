@@ -1,15 +1,60 @@
 body {
-  background-image: url("images/frogmen_1.jpg");
+    background-color: #757571;
+}
+
+.jumbotron {
+  background-image: url("images/25H.jpg");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
-}
-
-
-.jumbotron {
-  background-color: rgba(255, 255, 255, 0.5);
-  font-weight: bold;
+  font-weight: light;
+  color: white;
   font-size: 80px;
   text-align: center;
 }
+
+#error_message {
+  font-weight: lighter;
+  text-align: center;
+}
+
+.well {
+  padding: 10px;
+  border: 3px solid black;
+  margin: 10px;
+  overflow: scroll;
+}
+
+.col-md-3 {
+    width: 300px;
+    height: 300px;
+}
+
+#response_times {
+    width: 600px;
+    height: 200px;
+}
+
+#events_link {
+    width: 600px;
+    height: 200px;
+}
+
+.event-items {
+  font-size: 1.5em;
+}
+
+.panel-body {
+  overflow: scroll;
+}
+
+h3 {
+  text-align: center;
+}
+
+.panel-heading {
+  font-size: 2em;
+}
+
+

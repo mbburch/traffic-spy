@@ -84,7 +84,7 @@ module TrafficSpy
     end
 
     post '/sources/:identifier/campaigns' do
-      if Source.find_by(identifier: params[:identifier])
+      if source = Source.find_by(identifier: params[:identifier])
         event_name = params[:eventNames]
         campaign   = params[:campaignName]
         if Campaign.find_by(name: campaign)
@@ -94,7 +94,7 @@ module TrafficSpy
           status 400
           body "Missing Parameters"
         else
-          CreateCampaignTables.create(params)
+          CreateCampaignTables.create(params,source.id)
         end
       else
         status 403

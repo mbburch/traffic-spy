@@ -129,6 +129,24 @@ class ServerTest < Minitest::Test
     assert_equal "Application Not Registered", last_response.body
   end
 
+  def test_it_creates_a_campaign_and_registered_event
+    create_source
+    params = campaign_params
+    post "/sources/jumpstartlab/campaigns", params
+
+    assert_equal 1, Campaign.count
+    assert_equal 2, RegisteredEvent.count
+    assert_equal 1, Campaign.first.id
+    assert_equal 1, Campaign.first.source_id
+    assert_equal 'socialSignup', Campaign.first.name
+    assert_equal 1, RegisteredEvent.first.id
+    assert_equal 1, RegisteredEvent.first.campaign_id
+    assert_equal 'registrationStep1', RegisteredEvent.first.event_name
+    assert_equal 2, RegisteredEvent.last.id
+    assert_equal 1, RegisteredEvent.last.campaign_id
+    assert_equal 'registrationStep2', RegisteredEvent.last.event_name
+  end
+
 
   def setup
     DatabaseCleaner.start
@@ -161,7 +179,7 @@ class ServerTest < Minitest::Test
   end
 
   def campaign_params
-    'campaignName=socialSignup&eventNames[]=registrationStep1'
+    'campaignName=socialSignup&eventNames[]=registrationStep1eventNames[]=registrationStep2'
   end
 
   def payload_hash

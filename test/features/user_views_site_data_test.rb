@@ -7,7 +7,7 @@ class UserViewsSiteDataTest < FeatureTest
 
     assert_equal "/sources/jumpstartlab", current_path
 
-    within(".page-header") do
+    within(".jumbotron") do
       assert page.has_content?("Jumpstartlab Site Data")
     end
 

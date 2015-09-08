@@ -83,6 +83,25 @@ module TrafficSpy
       end
     end
 
+    post '/sources/:identifier/campaigns' do
+      if Source.find_by(identifier: params[:identifier])
+        event_name = params[:eventNames]
+        campaign   = params[:campaignName]
+        if Campaign.find_by(name: campaign)
+          status 403
+          body "Campaign Already Registered"
+        elsif event_name.nil? || campaign.nil?
+          status 400
+          body "Missing Parameters"
+        else
+          CreateCampaignTables.create(params)
+        end
+      else
+        status 403
+        body "Application Not Registered"
+      end
+    end
+
     not_found do
       erb :error
     end

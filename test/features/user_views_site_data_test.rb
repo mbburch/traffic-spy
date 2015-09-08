@@ -34,7 +34,7 @@ class UserViewsSiteDataTest < FeatureTest
 
     within("#response_times") do
       assert page.has_content?("URL Average Response Times")
-      assert page.has_content?("http://jumpstartlab.com/blog: 46ms")
+      assert page.has_content?("http://jumpstartlab.com/blog: 50ms")
       assert page.has_content?("http://jumpstartlab.com/about: 37ms")
       assert find_link("http://jumpstartlab.com/blog").visible?
       assert find_link("http://jumpstartlab.com/about").visible?
@@ -58,17 +58,13 @@ class UserViewsSiteDataTest < FeatureTest
     source_seed_data = { identifier: "jumpstartlab",
                root_url: "http://jumpstartlab.com" }
     Source.create(source_seed_data)
-    create_visit
-    create_visit("2",2)
-    create_visit("3")
+    create_visit("1", 1, 42)
+    create_visit("2",2, 37)
+    create_visit("3", 1, 58)
     url_seed_data = { address: "http://jumpstartlab.com/blog",
-                      source_id: 1,
-                      visits_count: 2,
-                      average_response_time: 46 }
+                      source_id: 1}
     url_seed_data2 = { address: "http://jumpstartlab.com/about",
-                       source_id: 1,
-                       visits_count: 1,
-                       average_response_time: 37 }
+                       source_id: 1}
     Url.create(url_seed_data)
     Url.create(url_seed_data2)
   end
@@ -77,10 +73,10 @@ class UserViewsSiteDataTest < FeatureTest
     DatabaseCleaner.clean
   end
 
-  def create_visit(sha_id = "1", url_id = 1)
+  def create_visit(sha_id, url_id, responded_in)
     params = {url_id: url_id,
                requested_at: "2013-02-16 21:38:28 -0700",
-               responded_in: 37,
+               responded_in: responded_in,
                referred_by: "http://jumpstartlab.com",
                request_type: "GET",
                parameters: [],

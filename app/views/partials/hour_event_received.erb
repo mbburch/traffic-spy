@@ -8,7 +8,7 @@
   <%24.times do%>
     <tr>
       <td class="time-received"><%="#{counter}:00".rjust(5, "0")%></td>
-      <td class="number-received"><%=@visits_by_time[counter]%></td>
+      <td class="number-received"><%=@hour_hits[counter]%></td>
     </tr>
     <%counter +=1%>
   <%end%>

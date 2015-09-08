@@ -4,6 +4,7 @@ class EventTest < Minitest::Test
 
   def test_it_creates_a_event_with_valid_attributes
     event = Event.new(attributes)
+    
     assert event.valid?
     event.save
     assert_equal 1, Event.count

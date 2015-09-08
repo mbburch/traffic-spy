@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150907002513) do
+ActiveRecord::Schema.define(version: 20150908022924) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,10 +31,8 @@ ActiveRecord::Schema.define(version: 20150907002513) do
   create_table "urls", force: :cascade do |t|
     t.text     "address"
     t.integer  "source_id"
-    t.integer  "visits_count",          default: 0
-    t.integer  "average_response_time", default: 0
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "visits", force: :cascade do |t|

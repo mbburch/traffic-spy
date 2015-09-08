@@ -1,27 +1,14 @@
 class Messenger
 
-  attr_reader :record, :model
+  attr_reader :record, :model, :attributes
 
   def initialize(params, model)
     @model = model
-    attribute_array = params.to_a.map do |key, value|
-      [key.to_s.underscore.to_sym, value]
-    end
-    attributes = attribute_array.to_h
+    @attributes = attribute_array(params).to_h
     if model == "Visit"
-      url = Url.find_or_create_by(address: attributes[:url])
-      url.source_id = attributes[:source_id]
-      total_response_time = url.average_response_time * url.visits_count
-      url.visits_count += 1
-      url.average_response_time = (total_response_time + attributes[:responded_in])/url.visits_count
-      attributes.delete(:url)
-      attributes[:url_id] = url.id
-      event = Event.find_or_create_by(name: attributes[:event_name],
-                                      source_id: attributes[:source_id])
-      event.save
-      attributes.delete(:event_name)
-      attributes[:event_id] = event.id
-      url.save if url.valid?
+      url = find_or_create_url
+      event = find_or_create_event
+      update_attributes(url, event)
       @record = url.visits.new(attributes)
     else
       @record = eval(model).new(attributes)
@@ -71,6 +58,33 @@ class Messenger
     gsub(/([a-z\d])([A-Z])/,'\1_\2').
     tr("-", "_").
     downcase
+  end
+
+  def attribute_array(params)
+    params.to_a.map do |key, value|
+      [key.to_s.underscore.to_sym, value]
+    end
+  end
+
+  def find_or_create_url
+    url = Url.find_or_create_by(address: attributes[:url])
+    url.source_id = attributes[:source_id]
+    url.save if url.valid?
+    url
+  end
+
+  def find_or_create_event
+    event = Event.find_or_create_by(name: attributes[:event_name],
+                                    source_id: attributes[:source_id])
+    event.save if event.valid?
+    event
+  end
+
+  def update_attributes(url, event)
+    attributes.delete(:event_name)
+    attributes[:event_id] = event.id
+    attributes.delete(:url)
+    attributes[:url_id] = url.id
   end
 
 end

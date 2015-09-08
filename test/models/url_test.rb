@@ -22,7 +22,6 @@ class UrlTest < Minitest::Test
     url = Url.new(attributes)
     url2 = Url.new(attributes)
 
-
     assert url.valid?
     url.save
     refute url2.valid?
@@ -40,9 +39,7 @@ class UrlTest < Minitest::Test
 
   def attributes
     {address: "http://jumpstartlab.com/about",
-     source_id: 1,
-     visits_count: 3,
-     average_response_time: 3}
+     source_id: 1}
   end
 
 end
